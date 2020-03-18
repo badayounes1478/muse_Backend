@@ -6,7 +6,7 @@ const app = express()
 
 app.use(bodyparser.json())
 app.use(cors())
-mongoose.connect('mongodb+srv://Roshan:roshan@cluster0-hetj0.mongodb.net/MusicData?retryWrites=true&w=majority',{useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex:true},(err, db)=>{
+mongoose.connect('mongodb+srv://Roshan:roshan@cluster0-hetj0.mongodb.net/Muse?retryWrites=true&w=majority',{useNewUrlParser:true, useUnifiedTopology:true, useCreateIndex:true},(err, db)=>{
     if (err) throw err;
     console.log('connected to the database')
 })
