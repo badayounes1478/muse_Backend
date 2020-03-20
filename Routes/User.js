@@ -148,12 +148,12 @@ router.get('/email/:user_email/:sender_email', (req, res, next) => {
 
   let mailOptions = {
     from: "mayurgaikwad7474@gmail.com",
-    to: req.params.sender_email,
+    to: req.params.user_email,
     subject: "Join the team of your friend",
-    html: `<a href="http://192.168.43.29:3000/signup/${token}">JOIN TEAM</h5>`
+    html: `<a href="http://192.168.43.29:3000/signin/${token}">JOIN TEAM</h5>`
   }
 
-  user.find({ email: req.body.sender_email }).then(data => {
+  user.find({ email: req.params.sender_email }).then(data => {
     if (data.length >= 1) {
       smtpTransport.sendMail(mailOptions, (err, info) => {
         if (err) {
