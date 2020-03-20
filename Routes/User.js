@@ -157,7 +157,7 @@ router.get('/email/:user_email/:sender_email', (req, res, next) => {
     if (data.length >= 1) {
       smtpTransport.sendMail(mailOptions, (err, info) => {
         if (err) {
-          res.send('failed to send')
+          res.send('failed to send'+err)
         } else {
           res.send(info.response)
         }
