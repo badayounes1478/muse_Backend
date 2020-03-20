@@ -136,22 +136,52 @@ router.get('/team/:email', (req, res, next) => {
 
 
 //sending mail to the user for joining a team
-router.get('/email/:user_email', (req, res, next) => {
+router.get('/email/:user_email/:sender_email', (req, res, next) => {
+
+  const token = jwt.sign({
+    user_email: req.params.user_email,
+    sender_email: req.params.sender_email
+  }, "secret",
+    {
+      expiresIn: "24h"
+    })
+
   let mailOptions = {
     from: "mayurgaikwad7474@gmail.com",
-    to: req.params.user_email,
+    to: req.params.sender_email,
     subject: "Join the team of your friend",
-    html: `<h1>Test Email</h1>`
+    html: `<a href="http://192.168.43.29:4000/user/accept/${token}">JOIN TEAM</h5>`
   }
 
-  smtpTransport.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      res.send('failed to send')
+  user.find({ email: req.body.sender_email }).then(data => {
+    if (data.length >= 1) {
+      smtpTransport.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          res.send('failed to send')
+        } else {
+          res.send(info.response)
+        }
+      })
     } else {
-      res.send(info.response)
+      return res.status(404).json({ message: "You dont have account" })
     }
   })
+
 })
+
+router.get('/accept/:token', (req, res, next) => {
+  var dateNow = new Date();
+  var decoded = jwt.decode(req.params.token)
+
+  if (decoded.exp < dateNow.getTime() / 1000) {
+    res.send('Token Expired')
+  } else {
+    res.redirect(`http://192.168.43.29:3000/accept/${token}`)
+  }
+})
+
+
+
 module.exports = router
 
 
