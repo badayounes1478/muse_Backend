@@ -111,10 +111,10 @@ router.post('/team', (req, res, next) => {
 router.put('/team/:email', (req, res, next) => {
   user.find({ email: req.body.joiner_email }).then(data => {
     if (data.length >= 1) {
-      team.find({ peoples: req.body.joiner_email }).then(data => {
+      team.find({ creator_email: req.params.email, peoples: req.body.joiner_email }).then(data => {
         if (data.length === 0) {
           team.updateOne({ creator_email: req.params.email }, { $push: { peoples: req.body.joiner_email } }).then(data => {
-            res.send('User added successfully')
+            res.send('user added')
           }).catch(err => {
             return res.status(500).json({ error: err })
           })
@@ -150,14 +150,14 @@ router.get('/email/:user_email/:sender_email', (req, res, next) => {
     from: "mayurgaikwad7474@gmail.com",
     to: req.params.user_email,
     subject: "Join the team of your friend",
-    html: `<a href="http://192.168.43.29:3000/signin/${token}">JOIN TEAM</h5>`
+    html: `<a href="http://192.168.43.29:4000/user/accept/${token}">JOIN TEAM</h5>`
   }
 
   user.find({ email: req.params.sender_email }).then(data => {
     if (data.length >= 1) {
       smtpTransport.sendMail(mailOptions, (err, info) => {
         if (err) {
-          res.send('failed to send'+err)
+          res.send('failed to send' + err)
         } else {
           res.send(info.response)
         }
@@ -176,7 +176,23 @@ router.get('/accept/:token', (req, res, next) => {
   if (decoded.exp < dateNow.getTime() / 1000) {
     res.send('Token Expired')
   } else {
-    res.redirect(`http://192.168.43.29:3000/accept/${token}`)
+    user.find({ email: decoded.user_email }).then(data => {
+      if (data.length >= 1) {
+        team.find({ creator_email: decoded.sender_email, peoples: decoded.user_email }).then(data => {
+          if (data.length === 0) {
+            team.updateOne({ creator_email: decoded.sender_email }, { $push: { peoples: decoded.user_email } }).then(data => {
+              res.redirect(`http://192.168.43.29:3000/login`)
+            }).catch(err => {
+              return res.status(500).json({ error: err })
+            })
+          } else {
+            return res.status(409).json({ message: 'User exists already' })
+          }
+        })
+      } else {
+        res.redirect(`http://192.168.43.29:3000/signin/${token}`)
+      }
+    })
   }
 })
 
