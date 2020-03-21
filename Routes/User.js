@@ -190,7 +190,7 @@ router.get('/accept/:token', (req, res, next) => {
           }
         })
       } else {
-        res.redirect(`http://192.168.43.29:3000/signin/${token}`)
+        res.redirect(`http://192.168.43.29:3000/signin/${req.params.token}`)
       }
     })
   }
