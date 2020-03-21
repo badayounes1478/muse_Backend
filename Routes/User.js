@@ -181,7 +181,7 @@ router.get('/accept/:token', (req, res, next) => {
         team.find({ creator_email: decoded.sender_email, peoples: decoded.user_email }).then(data => {
           if (data.length === 0) {
             team.updateOne({ creator_email: decoded.sender_email }, { $push: { peoples: decoded.user_email } }).then(data => {
-              res.redirect(`http://192.168.43.29:3000/`)
+              res.redirect(`https://muse-mayur.herokuapp.com/`)
             }).catch(err => {
               return res.status(500).json({ error: err })
             })
@@ -190,7 +190,7 @@ router.get('/accept/:token', (req, res, next) => {
           }
         })
       } else {
-        res.redirect(`http://192.168.43.29:3000/signin/${req.params.token}`)
+        res.redirect(`https://muse-mayur.herokuapp.com/signin/${req.params.token}`)
       }
     })
   }
