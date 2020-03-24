@@ -11,7 +11,9 @@ const team = new schema({
         required: true,
         type: String
     },
-    peoples: [String]
+    peoples: [String],
+    instance:String,
+    flag: { type: String, default: '1' }
 })
 
 module.exports = mongoose.model('Team', team)

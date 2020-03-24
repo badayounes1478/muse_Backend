@@ -197,6 +197,14 @@ router.get('/accept/:token', (req, res, next) => {
 })
 
 
+//chack the instance is active or not and give to the user
+router.get('/instance/:creator_email',(req, res, next)=>{
+  team.find({creator_email: req.params.creator_email}).then(data=>{
+    console.log(data)
+  })
+})
+
+
 
 module.exports = router
 
