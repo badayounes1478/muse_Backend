@@ -198,12 +198,27 @@ router.get('/accept/:token', (req, res, next) => {
 
 
 //chack the instance is active or not and give to the user
-router.get('/instance/:creator_email',(req, res, next)=>{
-  team.find({creator_email: req.params.creator_email}).then(data=>{
+router.get('/instance/:creator_email', (req, res, next) => {
+  team.find({ creator_email: req.params.creator_email }).then(data => {
     console.log(data)
+    if (data.length >= 1) {
+      if (data[0].flag === true) {
+        team.update({ creator_email: req.params.creator_email }, { $set: { flag: false } })
+        res.send(data[0].instance)
+      } else {
+        res.send("Your team mate is using the instance")
+      }
+    }
   })
 })
 
+//add the team instance to the team 
+router.put('/instance/add/:creator_email',(req, res, next)=>{
+  team.update({ creator_email: req.params.creator_email},{$set:{instance:req.body.instance}}).then(data=>{
+     console.log(data)
+     res.send('done')
+  })
+})
 
 
 module.exports = router

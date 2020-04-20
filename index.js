@@ -12,8 +12,9 @@ mongoose.connect('mongodb+srv://Roshan:roshan@cluster0-hetj0.mongodb.net/Muse?re
 })
 
 app.use('/user',require('./Routes/User'))
-
+app.use('/design',require('./Routes/designes'))
 
 app.listen(process.env.PORT || '4000',()=>{
     console.log('connected')
 })
+

@@ -13,7 +13,7 @@ const team = new schema({
     },
     peoples: [String],
     instance:String,
-    flag: { type: String, default: '1' }
+    flag: { type: Boolean, default: true }
 })
 
 module.exports = mongoose.model('Team', team)
