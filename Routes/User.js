@@ -11,8 +11,8 @@ const team = require('../Schema/Team')
 var smtpTransport = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: "mayurgaikwad7474@gmail.com",
-    pass: "8149367376"
+    user: process.env.USER,
+    pass: process.env.SECRET
   }
 });
 
